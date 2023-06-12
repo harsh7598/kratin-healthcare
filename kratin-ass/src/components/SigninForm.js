@@ -10,6 +10,7 @@ import {
 import { Email, VpnKey, VpnKeyOutlined } from "@material-ui/icons";
 import image1 from "../utils/Image2.jpg";
 import React, { useState } from "react";
+import NavBar from "./NavBar";
 //import { useHistory} from "react-router-dom";
 
 
@@ -99,6 +100,8 @@ const SigninForm = () => {
 
  
   return (
+    <>
+    <NavBar />
     <div className={classes.container}>
       <div className={classes.imageContainer}></div>
       <div className={classes.formContainer}>
@@ -202,6 +205,7 @@ const SigninForm = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

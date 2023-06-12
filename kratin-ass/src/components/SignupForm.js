@@ -10,6 +10,7 @@ import {
   Cake,
   Wc,
 } from "@material-ui/icons";
+import NavBar from "./NavBar";
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -49,6 +50,8 @@ const SignupForm = () => {
   const classes = useStyles();
 
   return (
+    <>
+    <NavBar />
     <div className={classes.formContainer}>
       <form className={classes.form}>
         <Grid container spacing={2}>
@@ -175,6 +178,7 @@ const SignupForm = () => {
         </Button>
       </form>
     </div>
+    </>
   );
 };
 
