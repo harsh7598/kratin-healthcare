@@ -13,20 +13,27 @@ import {
   FormControlLabel,
   TextField,
   Checkbox,
+  Badge,
+  IconButton,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import AddIcon from "@material-ui/icons/Add";
-import { HeartBroken, NotificationAdd } from "@mui/icons-material";
+import {
+  AddCircleOutline,
+  CheckCircleOutline,
+  Delete,
+  HeartBroken,
+  Home,
+  Snooze,
+} from "@mui/icons-material";
 import {
   CheckRounded,
-  Close,
-  MoreVert,
-  NotificationImportant,
   Notifications,
 } from "@material-ui/icons";
-
+import { useNavigate } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2),
@@ -74,11 +81,44 @@ const useStyles = makeStyles((theme) => ({
 
 const MedicineReminder = () => {
   const classes = useStyles();
+  const navigate = useNavigate(); 
   const [medicine, setMedicine] = useState("");
   const [timing, setTiming] = useState("");
   const [medicineName, setMedicineName] = useState("");
   const [daily, setDaily] = useState(true);
+  const [reminders, setReminders] = useState([]);
+  const [frequency, setFrequency] = useState('');
 
+  const handleFrequencyChange = (event) => {
+    setFrequency(event.target.value);
+  };
+
+  const addReminder = (medication, dosage, instructions, frequency, time) => {
+    const newReminder = {
+      medication,
+      dosage,
+      instructions,
+      frequency,
+      time,
+      isTaken: false,
+    };
+    setReminders([...reminders, newReminder]);
+  };
+
+  const markAsTaken = (index) => {
+    const updatedReminders = [...reminders];
+    updatedReminders[index].isTaken = true;
+    setReminders(updatedReminders);
+  };
+
+  const snoozeReminder = (index, snoozeDuration) => {
+  };
+
+  const deleteReminder = (index) => {
+    const updatedReminders = [...reminders];
+    updatedReminders.splice(index, 1);
+    setReminders(updatedReminders);
+  };
   const handleMedicineChange = (event) => {
     setMedicine(event.target.value);
   };
@@ -88,7 +128,6 @@ const MedicineReminder = () => {
   };
 
   const handleAddButton = () => {
-    // Perform the desired action when the "Add" button is clicked
     console.log("Medicine:", medicine);
     console.log("Timing:", timing);
   };
@@ -102,10 +141,13 @@ const MedicineReminder = () => {
   };
 
   const handleSubmit = () => {
-    // Handle the submission of the medicine slot
-    // You can access the medicineName and daily values here
+
     console.log("Medicine Name:", medicineName);
     console.log("Daily:", daily);
+  };
+
+  const handleMedicationTaken = (medicationName) => {
+    console.log("Medication taken:", medicationName);
   };
 
   return (
@@ -113,9 +155,14 @@ const MedicineReminder = () => {
       <Typography variant="h5" component="h1" gutterBottom>
         <span style={{ color: "#f12711" }}>Medicine</span> Reminder
       </Typography>
-
+      <IconButton
+        onClick={() => navigate("/dashboard")}
+        style={{ position: "absolute", top: 0, left: 0, margin: "1rem" }}
+      >
+        <Home />
+      </IconButton>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={5}>
           <Card className={classes.card}>
             <CardHeader
               titleTypographyProps={{
@@ -130,79 +177,96 @@ const MedicineReminder = () => {
               Welcome to Daily Dose
             </Typography>
             <CardContent>
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuDRTIPbORQDX2a4e1ZD-soBEeSih0dflZkw&usqp=CAU" alt="Image 1" width={250} />
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlFPdDwdJI-RWULvVyRzPe6LyGLyXo-zfSjysea8VwdOpQKVHla8-x6Rjc5KKjjf8K2A&usqp=CAU"
+                alt="Image 1"
+                width={650}
+              />
             </CardContent>
-            <NotificationsIcon />
-        <Grid item xs={12} md={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <Card className={classes.card}>
-                <Typography variant="body5" component="p">
-                  Morning, Before breakfast
-                </Typography>
-                <CardContent>
-                  <CardHeader
-                    titleTypographyProps={{
-                      variant: "h5",
-                      component: "h2",
-                      className: classes.title,
-                    }}
-                    title="Theraflue MaxGrip"
-                  />
-                  <CardContent>
-                    <Typography variant="body1" component="p">
-                      2 Pills
+            <Badge badgeContent={3} color="secondary">
+              <NotificationsIcon />
+            </Badge>{" "}
+            <Grid item xs={12} md={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Card className={classes.card}>
+                    <Typography variant="body5" component="p">
+                      Morning, Before breakfast
                     </Typography>
-                    <HeartBroken />
-                    <Button variant="contained" color="primary">
-                      Taken<CheckRounded/>
-                    </Button>
-                    <Notifications />
-                  </CardContent>
-                </CardContent>
-              </Card>
-            </Grid>
+                    <CardContent>
+                      <CardHeader
+                        titleTypographyProps={{
+                          variant: "h5",
+                          component: "h2",
+                          className: classes.title,
+                        }}
+                        title="Theraflue MaxGrip"
+                      />
+                      <CardContent>
+                        <Typography variant="body1" component="p">
+                          2 Pills
+                        </Typography>
+                        <HeartBroken />
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() =>
+                            handleMedicationTaken("Theraflue MaxGrip")
+                          }
+                        >
+                          Taken
+                          <CheckRounded />
+                        </Button>
+                        <Notifications />
+                      </CardContent>
+                    </CardContent>
+                  </Card>
+                </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <Card className={classes.card}>
-                <Typography variant="body5" component="p">
-                  Morning After Breakfast
-                </Typography>
-                <CardHeader
-                  titleTypographyProps={{
-                    variant: "h5",
-                    component: "h2",
-                    className: classes.title,
-                  }}
-                  title="Rutinoscorbin"
-                />
-                <CardContent>
-                  <Typography variant="body1" component="p">
-                    2 Pills
-                  </Typography>
-                  <HeartBroken />
-                  <Button variant="contained" color="primary">
-                  Taken<CheckRounded/>
-
-                  </Button>
-                  <Notifications />
-                </CardContent>
-              </Card>
+                <Grid item xs={12} sm={6}>
+                  <Card className={classes.card}>
+                    <Typography variant="body5" component="p">
+                      Morning After Breakfast
+                    </Typography>
+                    <CardHeader
+                      titleTypographyProps={{
+                        variant: "h5",
+                        component: "h2",
+                        className: classes.title,
+                      }}
+                      title="Rutinoscorbin"
+                    />
+                    <CardContent>
+                      <Typography variant="body1" component="p">
+                        2 Pills
+                      </Typography>
+                      <HeartBroken />
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleMedicationTaken("Rutinoscorbin")}
+                      >
+                        Taken
+                        <CheckRounded />
+                      </Button>
+                      <Notifications />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
           </Card>
         </Grid>
 
-
         <Grid item xs={12} md={4}>
-          <Card>
+          <Card className={classes.card}>
             <CardHeader
               titleTypographyProps={{
                 variant: "h5",
                 component: "h2",
               }}
               title="Schedule the Dose"
+              className={classes.cardHeader}
             />
             <CardContent>
               <FormControl className={classes.formControl}>
@@ -213,6 +277,8 @@ const MedicineReminder = () => {
                   labelId="time-label"
                   id="time"
                   className={classes.select}
+                  value={timing}
+                  onChange={handleTimingChange}
                 >
                   <MenuItem value="morning-after-breakfast">
                     Morning After Breakfast
@@ -246,30 +312,54 @@ const MedicineReminder = () => {
                 </Select>
               </FormControl>
 
+              <FormControl className={classes.formControl}>
+                <InputLabel id="frequency-label">Frequency</InputLabel>
+                <Select
+                  labelId="frequency-label"
+                  id="frequency"
+                  value={daily ? "daily" : "non-daily"}
+                  onChange={handleDailyChange}
+                  className={classes.select}
+                >
+                  <MenuItem value="daily">Daily</MenuItem>
+                  <MenuItem value="non-daily">Non-Daily</MenuItem>
+                </Select>
+              </FormControl>
 
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-                onClick={handleAddButton}
-                className={classes.addButton}
-              >
-                Add
-              </Button>
+              {daily ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                  onClick={handleAddButton}
+                  className={classes.addButton}
+                >
+                  Add
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                  onClick={handleAddButton}
+                  className={classes.addButton}
+                  disabled={!medicineName}
+                >
+                  Add
+                </Button>
+              )}
             </CardContent>
-            <Card>
+            <Card className={classes.subCard}>
               <CardHeader
                 titleTypographyProps={{
                   variant: "h5",
                   component: "h2",
                 }}
                 title="Add New Time Slot"
+                className={classes.cardHeader}
               />
               <CardContent>
                 <Grid container spacing={2}>
-                  {/* <Grid item>
-      <WbSunnyIcon />
-    </Grid> */}
                   <Grid item xs={12}>
                     <TextField
                       label="Medicine Name"
@@ -304,6 +394,98 @@ const MedicineReminder = () => {
             </Card>
           </Card>
         </Grid>
+
+        <Grid item xs={12} md={3}>
+  <Card className={classes.card}>
+    <CardHeader
+      titleTypographyProps={{
+        variant: "h5",
+        component: "h2",
+      }}
+      title="Add the Reminder"
+      className={classes.cardHeader}
+    />
+    <CardContent>
+      <form className={classes.reminderForm}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField label="Medication Name" variant="outlined" fullWidth />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label="Dosage" variant="outlined" fullWidth />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label="Instructions" variant="outlined" fullWidth />
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl variant="outlined" className={classes.select} fullWidth>
+              <InputLabel>Frequency</InputLabel>
+              <Select
+                value={frequency}
+                onChange={handleFrequencyChange}
+                label="Frequency"
+              >
+                <MenuItem value="daily">Daily</MenuItem>
+                <MenuItem value="weekly">Weekly</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField type="time" className={classes.timeInput} fullWidth />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              variant="contained"
+              startIcon={<AddCircleOutline />}
+              className={classes.addButton}
+              fullWidth
+            >
+              Add Reminder
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+      <ul className={classes.reminderList}>
+        {reminders.map((reminder, index) => (
+          <li key={index} className={classes.reminderItem}>
+            <div>
+              <Typography variant="h6">{reminder.medication}</Typography>
+              <Typography>Dosage: {reminder.dosage}</Typography>
+              <Typography>Instructions: {reminder.instructions}</Typography>
+              <Typography>Frequency: {reminder.frequency}</Typography>
+              <Typography>Time: {reminder.time}</Typography>
+              <Button
+                onClick={() => markAsTaken(index)}
+                variant="outlined"
+                startIcon={<CheckCircleOutline />}
+                className={classes.reminderButton}
+              >
+                Mark as Taken
+              </Button>
+              <Button
+                onClick={() => snoozeReminder(index, 10)}
+                variant="outlined"
+                startIcon={<Snooze />}
+                className={classes.reminderButton}
+              >
+                Snooze
+              </Button>
+              <Button
+                onClick={() => deleteReminder(index)}
+                variant="outlined"
+                startIcon={<Delete />}
+                className={classes.reminderButton}
+              >
+                Delete
+              </Button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </CardContent>
+  </Card>
+</Grid>
+
       </Grid>
     </div>
   );

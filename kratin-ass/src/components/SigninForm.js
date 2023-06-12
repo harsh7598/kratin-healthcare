@@ -12,7 +12,7 @@ import image1 from "../utils/Image2.jpg";
 import React, { useState } from "react";
 import NavBar from "./NavBar";
 //import { useHistory} from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -64,39 +64,29 @@ const useStyles = makeStyles((theme) => ({
 
 const SigninForm = () => {
   const classes = useStyles();
-//   const history = useHistory();
+  const navigate = useNavigate();
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   function loginpage(e) {
     e.preventDefault();
     const email = document.getElementById("email").value;
-   
-//     axios({
-//       method: "POST",
-//       url: ` ${process.env.REACT_APP_API_URL}/send-otp/login`,
-//       data: {
-//         email: email,
-//       },
-//     })
-//       .then((response) => {
-//         if (response.status === 200) {
-//           setShowOTPField(true);
-//           setStatus("success");
-//           showOtpSentSnackbar();
-//         } else {
-//           setError("An error occurred. Please try again later.");
-//         }
-//       })
-//       .catch((error) => {
-//         console.log(error.response);
-//         if (error.response && error.response.status === 401) {
-//           setError("Invalid OTP");
-//         } else {
-//           setError("An error occurred. Please try again later.");
-//         }
-//       });
-   }
+    const password = document.getElementById("password").value;
+  
+    // Hardcoded email and password values
+    const hardcodedEmail = "example@example.com";
+    const hardcodedPassword = "password123";
+  
+    if (email === hardcodedEmail && password === hardcodedPassword) {
+      setShowSnackbar(true);
+      setSnackbarMessage("Login successful");
+      navigate("/dashboard");
+    } else {
+      // Handle login failure
+      setShowSnackbar(true);
+      setSnackbarMessage("Invalid email or password");
+    }
+  }
 
  
   return (
