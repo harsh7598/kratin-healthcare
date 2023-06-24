@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/kratin-healthcare/static/js/main.0b1f5a52.js",
+    "static/js/787.79618ba6.chunk.js": "/kratin-healthcare/static/js/787.79618ba6.chunk.js",
+    "static/media/Image2.jpg": "/kratin-healthcare/static/media/Image2.c1b9d30df60348da04fd.jpg",
+    "index.html": "/kratin-healthcare/index.html",
+    "main.0b1f5a52.js.map": "/kratin-healthcare/static/js/main.0b1f5a52.js.map",
+    "787.79618ba6.chunk.js.map": "/kratin-healthcare/static/js/787.79618ba6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.0b1f5a52.js"
+  ]
+}
